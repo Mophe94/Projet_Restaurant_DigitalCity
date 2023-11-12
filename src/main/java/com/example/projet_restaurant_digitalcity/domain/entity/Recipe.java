@@ -1,12 +1,18 @@
 package com.example.projet_restaurant_digitalcity.domain.entity;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Fetch;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Recipe {
 
     @Id
@@ -21,15 +27,14 @@ public class Recipe {
     private String method;
     @Column(name = "Recipe_Time_To_Make",nullable = false)
     private LocalDateTime timeToMake;
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(
-//            name = "Recipe_ProductTemplate",
-//            joinColumns = @JoinColumn(name = "Recipe_Id",nullable = false),
-//            inverseJoinColumns = @JoinColumn(name = "Product_Template_id",nullable = false)
-//    )
-//    private List<ProductTemplate> productTemplateList;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "Recipe_ProductTemplate",
+            joinColumns = @JoinColumn(name = "Recipe_Id",nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "Product_Template_id",nullable = false)
+    )
+    private List<ProductTemplate> productTemplateList;
 
-//    @OneToOne
-//    @JoinColumn(name = "Product_From_Recipe",nullable = false)
-//    private ProductTemplate productFromRecipe;
+    @OneToOne(mappedBy = "productFromRecipe")
+    private ProductTemplate productFromRecipe;
 }

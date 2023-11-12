@@ -1,11 +1,17 @@
 package com.example.projet_restaurant_digitalcity.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
-
+@Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProductTemplate {
 
     @Id
@@ -20,12 +26,13 @@ public class ProductTemplate {
     private String origin;
     @Column(name = "Limit_Order_Product",nullable = false)
     private double limitOrder;
-//    @OneToMany(mappedBy = "productTemplate")
-//    private List<ProductItem>productItems;
-//    @OneToOne(mappedBy = "productFromRecipe")
-//    private Recipe productFromRecipe;
-//    @ManyToOne
-//    @JoinColumn(name = "Linked_supplier",nullable = false)
-//    private Supplier supplier;
+    @OneToMany(mappedBy = "productTemplate")
+    private List<ProductItem>productItems;
+    @OneToOne
+    @JoinColumn(name = "Product_From_Recipe",nullable = true)
+    private Recipe productFromRecipe;
+    @ManyToOne
+    @JoinColumn(name = "Linked_supplier",nullable = true)
+    private Supplier supplier;
 
 }

@@ -2,10 +2,17 @@ package com.example.projet_restaurant_digitalcity.domain.entity;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
+@Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,14 +21,16 @@ public class Supplier {
     @Column(name = "Supplier_Phone_Number",nullable = false)
     private String phoneNumber;
     @Column(name = "Supplier_Opening_Hour",nullable = false)
-    private String OpeningHour;
+    private String openingHour;
+    @Column(name = "Supplier_Close_Hour",nullable = false)
+    private String closeHour;
     @Column(name = "Supplier_Email",nullable = false)
-    private String Email;
-//    @OneToMany(mappedBy = "supplier")
-//    private List<ProductTemplate>productTemplates;
+    private String email;
+    @OneToMany(mappedBy = "supplier")
+    private List<ProductTemplate>productTemplates;
 
-//    @OneToMany(mappedBy = "supplier")
-//    private List<Order>orders;
+    @OneToMany(mappedBy = "supplier")
+    private List<OrderProduct>orders;
 
 
 }

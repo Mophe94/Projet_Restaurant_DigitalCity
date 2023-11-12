@@ -2,10 +2,17 @@ package com.example.projet_restaurant_digitalcity.domain.entity;
 
 import com.example.projet_restaurant_digitalcity.domain.StorageType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
+@Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Storage {
 
     @Id
@@ -18,6 +25,6 @@ public class Storage {
     @Column(name = "Temperature",nullable = false)
     private double temperature;
 
-//    @OneToMany(mappedBy = "storage")
-//    private List<ProductItem> productItems;
+    @OneToMany(mappedBy = "storage")
+    private List<ProductItem> productItems;
 }

@@ -2,11 +2,17 @@ package com.example.projet_restaurant_digitalcity.domain.entity;
 
 import com.example.projet_restaurant_digitalcity.domain.WorkerRoles;
 import jakarta.persistence.*;
-import org.aspectj.weaver.ast.Or;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
+@Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Worker {
 
     @Id
@@ -21,8 +27,8 @@ public class Worker {
     private String password;
     @Column(name = "Worker_Role",nullable = false)
     @Enumerated(EnumType.STRING)
-    private WorkerRoles roles;
-//    @OneToMany(mappedBy ="worker")
-//    private List<Order>orders;
+    private WorkerRoles role;
+    @OneToMany(mappedBy ="worker")
+    private List<OrderProduct>orders;
 
 }
