@@ -1,7 +1,9 @@
-package com.example.projet_restaurant_digitalcity.entity;
+package com.example.projet_restaurant_digitalcity.domain.entity;
 
 
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Supplier {
@@ -15,5 +17,11 @@ public class Supplier {
     private String OpeningHour;
     @Column(name = "Supplier_Email",nullable = false)
     private String Email;
+//    @OneToMany(mappedBy = "supplier")
+//    private List<ProductTemplate>productTemplates;
+
+//    @OneToMany(mappedBy = "supplier")
+//    private List<Order>orders;
+
 
 }
