@@ -35,6 +35,6 @@ public class Recipe {
     )
     private List<ProductTemplate> productTemplateList;
 
-    @OneToOne(mappedBy = "productFromRecipe")
-    private ProductTemplate productFromRecipe;
+//    @OneToOne(mappedBy = "productFromRecipe")
+//    private ProductTemplate productFromRecipe;
 }

@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -21,9 +23,9 @@ public class Supplier {
     @Column(name = "Supplier_Phone_Number",nullable = false)
     private String phoneNumber;
     @Column(name = "Supplier_Opening_Hour",nullable = false)
-    private String openingHour;
+    private LocalTime openingHour;
     @Column(name = "Supplier_Close_Hour",nullable = false)
-    private String closeHour;
+    private LocalTime closeHour;
     @Column(name = "Supplier_Email",nullable = false)
     private String email;
     @OneToMany(mappedBy = "supplier")

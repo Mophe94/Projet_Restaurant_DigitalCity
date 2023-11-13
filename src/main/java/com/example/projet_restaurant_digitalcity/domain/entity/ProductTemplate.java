@@ -28,9 +28,9 @@ public class ProductTemplate {
     private double limitOrder;
     @OneToMany(mappedBy = "productTemplate")
     private List<ProductItem>productItems;
-    @OneToOne
-    @JoinColumn(name = "Product_From_Recipe",nullable = true)
-    private Recipe productFromRecipe;
+//    @OneToOne
+//    @JoinColumn(name = "Linked_Recipe",nullable = true)
+//    private Recipe linkedRecipe;
     @ManyToOne
     @JoinColumn(name = "Linked_supplier",nullable = true)
     private Supplier supplier;

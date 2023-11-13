@@ -1,8 +1,10 @@
 package com.example.projet_restaurant_digitalcity.bl.services.impl;
 
 import com.example.projet_restaurant_digitalcity.bl.services.ProductTemplateService;
+import com.example.projet_restaurant_digitalcity.bl.services.SupplierService;
 import com.example.projet_restaurant_digitalcity.dal.repositories.ProductTemplateRepository;
 import com.example.projet_restaurant_digitalcity.domain.entity.ProductTemplate;
+import com.example.projet_restaurant_digitalcity.domain.entity.Supplier;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
@@ -12,13 +14,22 @@ public class ProductTemplateServiceImpl implements ProductTemplateService {
 
     private final ProductTemplateRepository productTemplateRepository;
 
+
     public ProductTemplateServiceImpl(ProductTemplateRepository productTemplateRepository) {
         this.productTemplateRepository = productTemplateRepository;
+
     }
 
-    public ProductTemplate getOne(long id){
+    public ProductTemplate getOneById(long id){
         return productTemplateRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("no item found with this id"));
+    }
+
+    @Override
+    public ProductTemplate getOneByName(String name) {
+
+        return  productTemplateRepository.getFirstByName(name)
+                .orElseThrow(()-> new RuntimeException("no item found with this name"));
     }
 
     public List<ProductTemplate> getAll(){
@@ -26,10 +37,12 @@ public class ProductTemplateServiceImpl implements ProductTemplateService {
     }
 
     public ProductTemplate create(ProductTemplate toCreate){
-        if(Objects.equals(toCreate.getName(), productTemplateRepository.findByName()))
+
+        if(productTemplateRepository.existsByName(toCreate.getName()))
             throw  new RuntimeException("this Name is already use take an oder one");
 
         return productTemplateRepository.save(toCreate);
+
 
     }
 
