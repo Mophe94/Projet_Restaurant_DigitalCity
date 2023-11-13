@@ -18,7 +18,7 @@ public class ProductTemplateForm {
     private double priceKG;
     @NotBlank
     private String origin;
-//    @Positive
+    @Positive
     private double limitOrder;
     @Positive
     private long supplierId;

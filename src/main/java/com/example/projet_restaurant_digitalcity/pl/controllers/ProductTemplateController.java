@@ -1,5 +1,4 @@
 package com.example.projet_restaurant_digitalcity.pl.controllers;
-
 import com.example.projet_restaurant_digitalcity.bl.services.ProductTemplateService;
 import com.example.projet_restaurant_digitalcity.bl.services.SupplierService;
 import com.example.projet_restaurant_digitalcity.domain.entity.ProductTemplate;

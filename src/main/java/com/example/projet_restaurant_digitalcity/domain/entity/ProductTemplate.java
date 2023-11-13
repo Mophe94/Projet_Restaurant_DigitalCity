@@ -28,11 +28,11 @@ public class ProductTemplate {
     private double limitOrder;
     @OneToMany(mappedBy = "productTemplate")
     private List<ProductItem>productItems;
-//    @OneToOne
-//    @JoinColumn(name = "Linked_Recipe",nullable = true)
-//    private Recipe linkedRecipe;
+    @OneToOne
+    @JoinColumn(name = "Linked_Recipe",nullable = true)
+    private Recipe linkedRecipe;
     @ManyToOne
-    @JoinColumn(name = "Linked_supplier",nullable = true)
+    @JoinColumn(name = "Linked_supplier",nullable = false)
     private Supplier supplier;
 
 }

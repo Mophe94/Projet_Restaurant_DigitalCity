@@ -32,6 +32,6 @@ public class OrderProduct {
     private Worker worker;
 
     @ManyToOne
-    @JoinColumn(name = "Linked_Supplier",nullable = true)
+    @JoinColumn(name = "Linked_Supplier",nullable = false)
     private Supplier supplier;
 }
