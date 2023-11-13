@@ -23,7 +23,7 @@ public class ProductItem {
     @Column(name = "Product_Item_Expire_Date",nullable = false)
     private LocalDate expiryDate;
     @ManyToOne
-    @JoinColumn(name = "ProductTemplate",nullable = false)
+    @JoinColumn(name = "ProductTemplate",nullable = true)
     private ProductTemplate productTemplate;
     @ManyToOne
     @JoinColumn(name = "Linked_storage",nullable = false)

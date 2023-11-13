@@ -53,7 +53,7 @@ public class ProductTemplateController {
     @PostMapping(path = {"","/add"})
     public ResponseEntity<?> create(@Valid @RequestBody ProductTemplateForm form){
         ProductTemplate entity = productTemplateMapper.toEntity(form);
-        entity.setSupplier( supplierService.getById(form.getSupplier()) );
+        entity.setSupplier( supplierService.getById(form.getSupplierId()) );
         productTemplateService.create(entity);
 
         return ResponseEntity.status(HttpStatus.CREATED)

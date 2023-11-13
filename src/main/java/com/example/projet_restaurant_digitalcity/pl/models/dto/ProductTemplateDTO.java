@@ -15,7 +15,7 @@ public class ProductTemplateDTO {
     private String origin;
     private double limitOrder;
     private List<ProductItemDTO> productItems;
-    private RecipeDTO recipe;
+//    private RecipeDTO recipe;
     private SupplierDTO supplier;
 
 }
