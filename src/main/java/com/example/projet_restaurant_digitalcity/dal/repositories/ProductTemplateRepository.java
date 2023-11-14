@@ -7,7 +7,7 @@ import java.util.Optional;
 public interface ProductTemplateRepository extends JpaRepository<ProductTemplate,Long> {
 
 
-    Optional<ProductTemplate> getFirstByName(String name);
+    Optional<ProductTemplate> findByName(String name);
 
     boolean existsByName(String name);
 

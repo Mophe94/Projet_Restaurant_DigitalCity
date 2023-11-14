@@ -16,9 +16,9 @@ public class ProductTemplate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Product_Template_id", nullable = false)
+    @Column(name = "Product_Template_id", nullable = false,unique = true)
     private long id;
-    @Column(name = "Name_Product",nullable = false)
+    @Column(name = "Name_Product",nullable = false,unique = true)
     private String name;
     @Column(name = "Price_Product",nullable = false)
     private double priceKG;

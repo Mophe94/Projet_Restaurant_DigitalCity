@@ -16,6 +16,8 @@ public interface ProductTemplateService {
     ProductTemplate create(ProductTemplate toCreate);
     ProductTemplate update(long id, ProductTemplate toCreate);
 
+    void delete(long id);
+
 
 
 

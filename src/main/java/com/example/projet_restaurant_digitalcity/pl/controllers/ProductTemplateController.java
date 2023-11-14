@@ -28,11 +28,11 @@ public class ProductTemplateController {
 
     @GetMapping(path = {"","/all"})
     public ResponseEntity<List<ProductTemplateDTO>> getAll(){
-        return ResponseEntity.ok(
-                productTemplateService.getAll().stream()
-                        .map(productTemplateMapper::toDto)
-                        .toList()
-        );
+        List<ProductTemplateDTO> body = productTemplateService.getAll().stream()
+                .map(productTemplateMapper::toDto)
+                .toList();
+
+        return ResponseEntity.ok(body);
     }
 
     @GetMapping("/{id:^[0-9]+$}")
@@ -57,5 +57,19 @@ public class ProductTemplateController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .build();
+    }
+    @DeleteMapping("/{id:^[0-9]+$}")
+    public ResponseEntity<?> delete(@PathVariable long id){
+        productTemplateService.delete(id);
+        return ResponseEntity.noContent()
+                .build();
+    }
+
+    @PutMapping("/{id:^[0-9]+$}")
+    public ResponseEntity<?> update(@PathVariable long id,@Valid @RequestBody ProductTemplateForm form){
+       ProductTemplate update =  productTemplateService.update(id,productTemplateMapper.toEntity(form));
+        return ResponseEntity.ok(
+                productTemplateMapper.toDto(update)
+        );
     }
 }

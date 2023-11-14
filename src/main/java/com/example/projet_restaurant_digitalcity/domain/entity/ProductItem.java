@@ -21,7 +21,7 @@ public class ProductItem {
     private double quantity;
 
     @Column(name = "Product_Item_Expire_Date",nullable = false)
-    private LocalDate expiryDate;
+    private LocalDate expireDate;
     @ManyToOne
     @JoinColumn(name = "ProductTemplate",nullable = false)
     private ProductTemplate productTemplate;

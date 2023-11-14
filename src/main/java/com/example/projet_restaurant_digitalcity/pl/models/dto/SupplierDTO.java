@@ -17,4 +17,5 @@ public class SupplierDTO {
     private String email;
     private List<ProductTemplateDTO>productTemplates;
     private List<OrderProductDTO>orders;
+
 }

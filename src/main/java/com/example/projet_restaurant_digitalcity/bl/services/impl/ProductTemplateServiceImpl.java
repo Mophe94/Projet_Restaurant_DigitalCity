@@ -1,14 +1,10 @@
 package com.example.projet_restaurant_digitalcity.bl.services.impl;
 
 import com.example.projet_restaurant_digitalcity.bl.services.ProductTemplateService;
-import com.example.projet_restaurant_digitalcity.bl.services.SupplierService;
 import com.example.projet_restaurant_digitalcity.dal.repositories.ProductTemplateRepository;
 import com.example.projet_restaurant_digitalcity.domain.entity.ProductTemplate;
-import com.example.projet_restaurant_digitalcity.domain.entity.Supplier;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Objects;
-
 @Service
 public class ProductTemplateServiceImpl implements ProductTemplateService {
 
@@ -28,7 +24,7 @@ public class ProductTemplateServiceImpl implements ProductTemplateService {
     @Override
     public ProductTemplate getOneByName(String name) {
 
-        return  productTemplateRepository.getFirstByName(name)
+        return  productTemplateRepository.findByName(name)
                 .orElseThrow(()-> new RuntimeException("no item found with this name"));
     }
 
@@ -56,6 +52,5 @@ public class ProductTemplateServiceImpl implements ProductTemplateService {
     public void delete(long id){
         productTemplateRepository.deleteById(id);
     }
-
 
 }

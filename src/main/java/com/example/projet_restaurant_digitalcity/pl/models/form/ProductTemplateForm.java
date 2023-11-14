@@ -1,7 +1,6 @@
 package com.example.projet_restaurant_digitalcity.pl.models.form;
 
 
-import com.example.projet_restaurant_digitalcity.pl.models.dto.RecipeDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;

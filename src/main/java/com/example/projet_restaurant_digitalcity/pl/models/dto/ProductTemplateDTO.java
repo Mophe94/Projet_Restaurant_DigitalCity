@@ -3,6 +3,7 @@ package com.example.projet_restaurant_digitalcity.pl.models.dto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Data
@@ -14,8 +15,18 @@ public class ProductTemplateDTO {
     private double priceKG;
     private String origin;
     private double limitOrder;
-    private List<ProductItemDTO> productItems;
-//    private RecipeDTO recipe;
     private SupplierDTO supplier;
+
+    @Data
+    @Builder
+    public static class SupplierDTO {
+
+        private long id;
+        private String phoneNumber;
+        private LocalTime openingHour;
+        private LocalTime closeHour;
+        private String email;
+
+    }
 
 }

@@ -12,7 +12,6 @@ public class WorkerDTO {
     private long id;
     private String name;
     private String username;
-
     private WorkerRoles role;
     private List<OrderProductDTO> orders;
 }
