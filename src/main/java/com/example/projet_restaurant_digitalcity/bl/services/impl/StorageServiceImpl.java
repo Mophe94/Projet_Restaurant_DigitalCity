@@ -5,7 +5,11 @@ import com.example.projet_restaurant_digitalcity.dal.repositories.ProductItemRep
 import com.example.projet_restaurant_digitalcity.dal.repositories.StorageRepository;
 import com.example.projet_restaurant_digitalcity.domain.entity.ProductItem;
 import com.example.projet_restaurant_digitalcity.domain.entity.Storage;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.awt.print.Pageable;
 import java.util.List;
 
 @Service
@@ -38,8 +42,9 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
-    public List<Storage> getAll() {
-        return storageRepository.findAll();
+    public Page<Storage> getAll(int page, int countByPage) {
+
+        return storageRepository.findAll(PageRequest.of(page,countByPage));
     }
 
     @Override

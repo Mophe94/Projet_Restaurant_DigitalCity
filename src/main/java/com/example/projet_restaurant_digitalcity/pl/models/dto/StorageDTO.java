@@ -11,8 +11,8 @@ import java.util.List;
 public class StorageDTO {
 
     private long id;
+    private String name;
     private StorageType storageType;
-    private double temperature;
 
     @Data
     @Builder

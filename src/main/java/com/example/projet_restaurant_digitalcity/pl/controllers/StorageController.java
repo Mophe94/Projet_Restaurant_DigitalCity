@@ -7,12 +7,13 @@ import com.example.projet_restaurant_digitalcity.pl.models.dto.StorageDTO;
 import com.example.projet_restaurant_digitalcity.pl.models.form.ProductItemForm;
 import com.example.projet_restaurant_digitalcity.pl.models.form.StorageForm;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin
 @RestController
 @RequestMapping("/storage")
 public class StorageController {
@@ -56,12 +57,10 @@ public class StorageController {
     }
 
     @GetMapping(path = {"", "all"})
-    public ResponseEntity<List<StorageDTO>> getAll() {
-        return ResponseEntity.ok(
-                storageService.getAll().stream()
-                        .map(storageMapper::toDTo)
-                        .toList()
-        );
+    public ResponseEntity<Page<StorageDTO>> getAll(@RequestParam int page ) {
+        Page<StorageDTO> storages = storageService.getAll(page,5).map(storageMapper::toDTo);
+        return ResponseEntity.ok( storages );
+
     }
 
     @GetMapping("/{id:^[0-9]+$}")
