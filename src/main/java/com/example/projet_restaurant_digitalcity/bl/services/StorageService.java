@@ -8,12 +8,6 @@ import java.util.List;
 
 public interface StorageService {
 
-    List<ProductItem> getProductInStorage(long storageId);
-
-    ProductItem addProductInStorage(long storageId,ProductItem productToAdd);
-
-    void deleteProductInStorage(long idProductToDelete);
-
     Page<Storage> getAll(int page , int countByPage);
 
     Storage getOneById(long storageId);

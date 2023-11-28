@@ -13,16 +13,4 @@ public class StorageDTO {
     private long id;
     private String name;
     private StorageType storageType;
-
-    @Data
-    @Builder
-    public static class ProductItemInStorageDTO{
-
-        private long id;
-        private double quantity;
-        private LocalDate expireDate;
-        private String productTemplateName;
-
-    }
-
 }

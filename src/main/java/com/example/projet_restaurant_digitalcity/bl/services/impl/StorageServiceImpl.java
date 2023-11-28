@@ -7,6 +7,8 @@ import com.example.projet_restaurant_digitalcity.domain.entity.ProductItem;
 import com.example.projet_restaurant_digitalcity.domain.entity.Storage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Pageable;
@@ -23,23 +25,6 @@ public class StorageServiceImpl implements StorageService {
         this.productItemRepository = productItemRepository;
     }
 
-    @Override
-    public List<ProductItem> getProductInStorage(long storageId) {
-        return storageRepository.findAllProductItem(storageId);
-    }
-
-    @Override
-    public ProductItem addProductInStorage(long storageId, ProductItem productToAdd) {
-        productToAdd.setStorage(storageRepository.findById(storageId)
-                .orElseThrow(() -> new RuntimeException("no storage found with this id")));
-        return productItemRepository.save(productToAdd);
-
-    }
-
-    @Override
-    public void deleteProductInStorage( long idProductToDelete) {
-        productItemRepository.deleteById(idProductToDelete);
-    }
 
     @Override
     public Page<Storage> getAll(int page, int countByPage) {
@@ -63,11 +48,15 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public void delete(long idStorageToDelete) {
-
+        storageRepository.deleteById(idStorageToDelete);
     }
 
     @Override
     public Storage update(long idStorageToUpdate, Storage toUpdate) {
-        return null;
+        if(!storageRepository.existsById(idStorageToUpdate))
+            throw new RuntimeException("no storage found with this id");
+
+        toUpdate.setId(idStorageToUpdate);
+        return storageRepository.save(toUpdate);
     }
 }

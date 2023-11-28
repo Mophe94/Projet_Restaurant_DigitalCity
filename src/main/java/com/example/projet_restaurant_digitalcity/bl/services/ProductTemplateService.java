@@ -2,12 +2,13 @@ package com.example.projet_restaurant_digitalcity.bl.services;
 
 import com.example.projet_restaurant_digitalcity.domain.entity.ProductTemplate;
 import com.example.projet_restaurant_digitalcity.domain.entity.Supplier;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface ProductTemplateService {
 
-    List<ProductTemplate> getAll();
+    Page<ProductTemplate> getAll(int page , int countByPage);
 
     ProductTemplate getOneById(long id);
 
@@ -18,7 +19,5 @@ public interface ProductTemplateService {
 
     void delete(long id);
 
-
-
-
+    ProductTemplate setSupplierToProduct(long idSupplier, long idProduct);
 }

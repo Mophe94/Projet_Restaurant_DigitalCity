@@ -19,8 +19,7 @@ public class ProductItem {
     private long id;
     @Column(name = "Product_Item_Quantity",nullable = false)
     private double quantity;
-
-    @Column(name = "Product_Item_Expire_Date",nullable = false)
+    @Column(name = "Product_Item_Expire_Date")
     private LocalDate expireDate;
     @ManyToOne
     @JoinColumn(name = "ProductTemplate",nullable = false)
@@ -28,4 +27,5 @@ public class ProductItem {
     @ManyToOne
     @JoinColumn(name = "Linked_storage",nullable = false)
     private Storage storage;
+
 }

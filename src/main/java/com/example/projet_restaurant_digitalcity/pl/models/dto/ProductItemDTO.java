@@ -13,6 +13,7 @@ public class ProductItemDTO {
     private long id;
     private double quantity;
     private LocalDate expireDate;
-    private ProductTemplateDTO productTemplate;
-    private StorageDTO storage;
+    private String productTemplateName;
+
 }
+

@@ -6,33 +6,29 @@ import com.example.projet_restaurant_digitalcity.mapper.ProductTemplateMapper;
 import com.example.projet_restaurant_digitalcity.pl.models.dto.ProductTemplateDTO;
 import com.example.projet_restaurant_digitalcity.pl.models.form.ProductTemplateForm;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/productTemplate")
 public class ProductTemplateController {
 
     private final ProductTemplateService productTemplateService;
-    private final SupplierService supplierService;
     private final ProductTemplateMapper productTemplateMapper;
 
-    public ProductTemplateController(ProductTemplateService productTemplateService, SupplierService supplierService, ProductTemplateMapper productTemplateMapper) {
+    public ProductTemplateController(ProductTemplateService productTemplateService, ProductTemplateMapper productTemplateMapper) {
         this.productTemplateService = productTemplateService;
-        this.supplierService = supplierService;
+
         this.productTemplateMapper = productTemplateMapper;
     }
 
     @GetMapping(path = {"","/all"})
-    public ResponseEntity<List<ProductTemplateDTO>> getAll(){
-        List<ProductTemplateDTO> body = productTemplateService.getAll().stream()
-                .map(productTemplateMapper::toDto)
-                .toList();
-
-        return ResponseEntity.ok(body);
+    public ResponseEntity<Page<ProductTemplateDTO>> getAll(@RequestParam int page , @RequestParam int countByPage){
+        Page<ProductTemplateDTO> productTemplateDTOS = productTemplateService.getAll(page,countByPage)
+                .map(productTemplateMapper::toDto);
+        return ResponseEntity.ok(productTemplateDTOS);
     }
 
     @GetMapping("/{id:^[0-9]+$}")
@@ -52,7 +48,6 @@ public class ProductTemplateController {
     @PostMapping(path = {"","/add"})
     public ResponseEntity<?> create(@Valid @RequestBody ProductTemplateForm form){
         ProductTemplate entity = productTemplateMapper.toEntity(form);
-        entity.setSupplier( supplierService.getById(form.getSupplierId()) );
         productTemplateService.create(entity);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -71,5 +66,13 @@ public class ProductTemplateController {
         return ResponseEntity.ok(
                 productTemplateMapper.toDto(update)
         );
+    }
+    @PatchMapping("{id:^[0-9]+$}")
+    public ResponseEntity<?> addProductToSupplier(@PathVariable("id") long idProduct, @RequestParam long idSupplier){
+        productTemplateService.setSupplierToProduct(idSupplier,idProduct);
+        return ResponseEntity.ok(
+                productTemplateMapper.toDto(productTemplateService.getOneById(idProduct))
+        );
+
     }
 }

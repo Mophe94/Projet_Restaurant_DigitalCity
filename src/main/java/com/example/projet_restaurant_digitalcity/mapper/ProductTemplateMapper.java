@@ -10,10 +10,10 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = {SupplierService.class})
 public interface ProductTemplateMapper {
 
-
+    @Mapping(source = "supplier.name",target = "supplierName")
     ProductTemplateDTO toDto(ProductTemplate productTemplate);
 
-    @Mapping(target = "supplier", source = "supplierId")
+
     ProductTemplate toEntity(ProductTemplateForm productTemplateForm);
 
 

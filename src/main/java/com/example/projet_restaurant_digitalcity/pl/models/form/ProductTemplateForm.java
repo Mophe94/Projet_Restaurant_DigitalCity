@@ -14,11 +14,13 @@ public class ProductTemplateForm {
     @Size(min = 0,max = 20)
     private String name;
     @Positive
-    private double priceKG;
+    private double price;
     @NotBlank
     private String origin;
     @Positive
-    private double limitOrder;
-    @Positive
-    private long supplierId;
+    private double limitToOrder;
+    @NotBlank
+    private String unitOfMeasurement;
+    private int limitWhenOrder;
+
 }

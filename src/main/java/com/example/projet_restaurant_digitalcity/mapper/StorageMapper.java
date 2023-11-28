@@ -11,8 +11,8 @@ import org.mapstruct.Mapping;
 public interface StorageMapper {
 
     StorageDTO toDTo(Storage storage);
-    @Mapping(target = "productTemplateName",source = "productTemplate.name")
-    StorageDTO.ProductItemInStorageDTO productItemtoDto(ProductItem productItem);
+//    @Mapping(target = "productTemplateName",source = "productTemplate.name")
+//    StorageDTO.ProductItemInStorageDTO productItemtoDto(ProductItem productItem);
 
     Storage toEntity(StorageForm storageForm);
 

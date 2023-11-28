@@ -25,7 +25,9 @@ public class Storage {
     @Enumerated(EnumType.STRING)
     private StorageType storageType;
 
-
     @OneToMany(mappedBy = "storage")
     private List<ProductItem> productItems;
+    @OneToMany(mappedBy = "storage")
+    private  List<ProductFromProduction> productFromProductions;
+
 }

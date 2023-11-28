@@ -11,11 +11,16 @@ import java.util.List;
 public class SupplierDTO {
 
     private long id;
+    private String name;
     private String phoneNumber;
     private LocalTime openingHour;
     private LocalTime closeHour;
     private String email;
-    private List<ProductTemplateDTO>productTemplates;
-    private List<OrderProductDTO>orders;
+    private List<String> namesProductTemplates;
+
+
+
+
+
 
 }

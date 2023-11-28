@@ -12,21 +12,11 @@ public class ProductTemplateDTO {
 
     private long id;
     private String name;
-    private double priceKG;
+    private double price;
     private String origin;
-    private double limitOrder;
-    private SupplierDTO supplier;
-
-    @Data
-    @Builder
-    public static class SupplierDTO {
-
-        private long id;
-        private String phoneNumber;
-        private LocalTime openingHour;
-        private LocalTime closeHour;
-        private String email;
-
-    }
+    private double limitToOrder;
+    private String unitOfMeasurement;
+    private int limitWhenOrder;
+    private String supplierName;
 
 }

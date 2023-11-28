@@ -20,6 +20,8 @@ public class Supplier {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Supplier_id",nullable = false)
     private long id ;
+    @Column(name = "Supplier_name",nullable = false)
+    private String  name;
     @Column(name = "Supplier_Phone_Number",nullable = false)
     private String phoneNumber;
     @Column(name = "Supplier_Opening_Hour",nullable = false)

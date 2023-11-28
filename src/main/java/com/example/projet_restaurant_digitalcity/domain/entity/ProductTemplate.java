@@ -21,18 +21,17 @@ public class ProductTemplate {
     @Column(name = "Name_Product",nullable = false,unique = true)
     private String name;
     @Column(name = "Price_Product",nullable = false)
-    private double priceKG;
+    private double price;
     @Column(name = "Origin_Product",nullable = false)
     private String origin;
-    @Column(name = "Limit_Order_Product",nullable = false)
-    private double limitOrder;
-    @OneToMany(mappedBy = "productTemplate")
-    private List<ProductItem>productItems;
-    @OneToOne
-    @JoinColumn(name = "Linked_Recipe",nullable = true)
-    private Recipe linkedRecipe;
+    @Column(name = "Limit_To_Order_Product",nullable = false)
+    private double limitToOrder;
+    @Column(name = "Measuring_Unit",nullable = false)
+    private String measuringUnit;
+    @Column(name = "Limit_When_Order",nullable = false)
+    private int limitWhenOrder;
     @ManyToOne
-    @JoinColumn(name = "Linked_supplier",nullable = false)
+    @JoinColumn(name = "Linked_supplier")
     private Supplier supplier;
 
 }
