@@ -20,11 +20,11 @@ public class ProductionItem {
     @Column(name = "Production_Item_Status",nullable = true)
     @Enumerated(EnumType.STRING)
     private ProductionStatus status;
+    @Column(name = "ratioTocreate",nullable = false)
     @ManyToOne
     @JoinColumn(name = "Linked_Production_Template")
     private ProductionTemplate productionTemplate;
-    @OneToOne(mappedBy = "productionItem")
-    private ProductFromProduction productFromProduction;
+
 
 
 

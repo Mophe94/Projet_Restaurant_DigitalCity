@@ -56,35 +56,48 @@ public class ProductionServiceImpl implements ProductionService {
     }
 
     @Override
-    public Page<ProductionItem> startProduction(long idProductionTemplate, int quantityToStart,int page, int countByPage) {
+    public List<ProductionItem> startProduction(long idProductionTemplate, int nbOfProduction,int quantityToStart) {
         if (!productionTemplateRepository.existsById(idProductionTemplate))
             throw new RuntimeException("no production found with this id");
 
         List<ProductionItem> productionItems = null;
-        for (int i = 0; i < quantityToStart ; i++) {
+        for (int i = 0; i < nbOfProduction ; i++) {
             ProductionItem toCreate = new ProductionItem();
             toCreate.setId(0);
             toCreate.setStatus(ProductionStatus.JUST_STARTED);
             toCreate.setProductionTemplate(productionTemplateRepository.findById(idProductionTemplate)
                     .orElseThrow(() -> new RuntimeException("no production found with this id")));
 
+
             productionItems.add(toCreate);
+            productionItemRepository.save(toCreate);
+            
         }
 
-        return (Page<ProductionItem>) productionItems;
+        return productionItems;
     }
 
+    //save le statut
     @Override
     public ProductionItem pauseProduction(long idProductionItem) {
         ProductionItem productionItem = productionItemRepository.findById(idProductionItem)
                 .orElseThrow(()-> new RuntimeException("no production found with this id"));
         productionItem.setStatus(ProductionStatus.ON_PAUSE);
+        productionItemRepository.save(productionItem);
         return productionItem;
     }
 
     @Override
-    public List<ProductTemplate> errorDuringProduction(long idProductionItem, List<ProductTemplate> productAlreadyUsed) {
-        return null;
+    public ProductTemplate errorDuringProduction(long idProductionItem, ProductTemplate productAlreadyUsed, long idStorage) {
+        if (!productionItemRepository.existsById(idProductionItem))
+            throw new RuntimeException("this production don't exist");
+
+        ProductionItem productionItem = productionItemRepository.findById(idProductionItem)
+                .orElseThrow(()-> new RuntimeException("no production found wit this id"));
+
+         List<ProductTemplate> allProductOfThisProduction = productionItem.getProductionTemplate().getProductTemplateList();
+
+    return null;
     }
 
     @Override

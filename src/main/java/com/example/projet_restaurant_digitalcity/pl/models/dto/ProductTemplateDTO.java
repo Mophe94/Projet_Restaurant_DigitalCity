@@ -14,9 +14,7 @@ public class ProductTemplateDTO {
     private String name;
     private double price;
     private String origin;
-    private double limitToOrder;
     private String unitOfMeasurement;
-    private int limitWhenOrder;
     private String supplierName;
 
 }

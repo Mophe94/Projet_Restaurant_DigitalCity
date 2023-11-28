@@ -24,14 +24,12 @@ public class ProductTemplate {
     private double price;
     @Column(name = "Origin_Product",nullable = false)
     private String origin;
-    @Column(name = "Limit_To_Order_Product",nullable = false)
-    private double limitToOrder;
     @Column(name = "Measuring_Unit",nullable = false)
     private String measuringUnit;
-    @Column(name = "Limit_When_Order",nullable = false)
-    private int limitWhenOrder;
     @ManyToOne
-    @JoinColumn(name = "Linked_supplier")
+    @JoinColumn(name = "Linked_supplier",nullable = true)
     private Supplier supplier;
+
+
 
 }

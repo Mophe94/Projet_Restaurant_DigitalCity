@@ -33,8 +33,6 @@ public class Supplier {
     @OneToMany(mappedBy = "supplier")
     private List<ProductTemplate>productTemplates;
 
-    @OneToMany(mappedBy = "supplier")
-    private List<OrderProduct>orders;
 
 
 }

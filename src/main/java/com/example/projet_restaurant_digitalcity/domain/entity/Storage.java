@@ -27,7 +27,6 @@ public class Storage {
 
     @OneToMany(mappedBy = "storage")
     private List<ProductItem> productItems;
-    @OneToMany(mappedBy = "storage")
-    private  List<ProductFromProduction> productFromProductions;
+
 
 }

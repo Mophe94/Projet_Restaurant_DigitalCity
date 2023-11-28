@@ -28,4 +28,5 @@ public class ProductItem {
     @JoinColumn(name = "Linked_storage",nullable = false)
     private Storage storage;
 
+
 }

@@ -19,11 +19,11 @@ public interface ProductionService {
 
     void delete(long id);
 
-    Page<ProductionItem> startProduction(long idProductionTemplate, int quantityToStart,int page ,int countByPage);
+    List<ProductionItem> startProduction(long idProductionTemplate, int quantityToStart);
 
     ProductionItem pauseProduction( long idProductionItem);
 
-    List<ProductTemplate> errorDuringProduction(long idProductionItem, List<ProductTemplate> productAlreadyUsed);
+    ProductTemplate errorDuringProduction(long idProductionItem, ProductTemplate productAlreadyUsed, long idStorage);
 
     ProductionItem finishProduction(long idProductionItem);
 }

@@ -13,5 +13,5 @@ public class WorkerDTO {
     private String name;
     private String username;
     private WorkerRoles role;
-    private List<OrderProductDTO> orders;
+
 }

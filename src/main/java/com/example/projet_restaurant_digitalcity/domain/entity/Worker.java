@@ -28,7 +28,6 @@ public class Worker {
     @Column(name = "Worker_Role",nullable = false)
     @Enumerated(EnumType.STRING)
     private WorkerRoles role;
-    @OneToMany(mappedBy ="worker")
-    private List<OrderProduct>orders;
-
+    @OneToMany
+    List<ProductItem> productItems;
 }

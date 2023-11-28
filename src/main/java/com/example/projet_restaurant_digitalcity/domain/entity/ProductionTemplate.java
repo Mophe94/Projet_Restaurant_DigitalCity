@@ -28,17 +28,10 @@ public class ProductionTemplate {
     @Column(name = "Production_Time_To_Make",nullable = false)
     private LocalTime timeToMake;
     @Column(name = "Production_Result_Quantity",nullable = false)
-    private int resultQuantity;
+    private double resultQuantity;
     @Column(name = "Production_Measuring_Unit",nullable = false)
     private String measuringUnit;
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "Production_ProductTemplate",
-            joinColumns = @JoinColumn(name = "Production_Id",nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "Product_Template_id",nullable = false)
-    )
-    private List<ProductTemplate> productTemplateList;
-
-
+    @OneToMany(mappedBy = "idproductionTemplate", cascade = {CascadeType.PERSIST})
+    private List<ProductUsage> productUsed ;
 
 }
