@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalTime;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -31,7 +32,14 @@ public class ProductionTemplate {
     private double resultQuantity;
     @Column(name = "Production_Measuring_Unit",nullable = false)
     private String measuringUnit;
+    @OneToOne
+    @JoinColumn (name = "Product_result",nullable = false)
+    private ProductTemplate productTemplate;
     @OneToMany(mappedBy = "idproductionTemplate", cascade = {CascadeType.PERSIST})
     private List<ProductUsage> productUsed ;
+
+    @OneToMany(mappedBy = "productionTemplate")
+    private Collection<ProductionItem> productionItem;
+
 
 }

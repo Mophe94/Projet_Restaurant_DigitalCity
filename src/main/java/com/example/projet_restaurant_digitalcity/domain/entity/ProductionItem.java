@@ -20,10 +20,14 @@ public class ProductionItem {
     @Column(name = "Production_Item_Status",nullable = true)
     @Enumerated(EnumType.STRING)
     private ProductionStatus status;
-    @Column(name = "ratioTocreate",nullable = false)
+    @Column(name = "Ratio",nullable = false)
+    private double ratio;
     @ManyToOne
     @JoinColumn(name = "Linked_Production_Template")
     private ProductionTemplate productionTemplate;
+    @ManyToOne
+    @JoinColumn(name = "Linked_Worker",nullable = false )
+    private Worker worker;
 
 
 

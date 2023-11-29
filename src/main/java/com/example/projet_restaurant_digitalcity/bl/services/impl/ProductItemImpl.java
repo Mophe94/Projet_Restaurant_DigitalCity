@@ -3,6 +3,7 @@ import com.example.projet_restaurant_digitalcity.bl.services.ProductItemService;
 import com.example.projet_restaurant_digitalcity.dal.repositories.ProductItemRepository;
 import com.example.projet_restaurant_digitalcity.dal.repositories.StorageRepository;
 import com.example.projet_restaurant_digitalcity.domain.entity.ProductItem;
+import com.example.projet_restaurant_digitalcity.domain.entity.Storage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -39,6 +40,9 @@ public class ProductItemImpl implements ProductItemService {
         productToAdd.setStorage(storageRepository.findById(storageId)
                 .orElseThrow(() -> new RuntimeException("no storage found with this id")));
         return productItemRepository.save(productToAdd);
+
+    }
+    public void deleteProductItemInStorage(long idProductToDelete){
 
     }
 

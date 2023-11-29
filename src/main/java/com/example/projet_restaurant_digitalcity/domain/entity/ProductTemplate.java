@@ -29,6 +29,8 @@ public class ProductTemplate {
     @ManyToOne
     @JoinColumn(name = "Linked_supplier",nullable = true)
     private Supplier supplier;
+    @OneToMany(mappedBy = "productTemplate")
+    List<ProductItem> productItems;
 
 
 
