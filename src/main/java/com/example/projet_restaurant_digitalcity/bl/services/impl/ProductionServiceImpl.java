@@ -1,23 +1,21 @@
 package com.example.projet_restaurant_digitalcity.bl.services.impl;
 
-import com.example.projet_restaurant_digitalcity.bl.services.ProductItemService;
-import com.example.projet_restaurant_digitalcity.bl.services.ProductionService;
-import com.example.projet_restaurant_digitalcity.bl.services.StorageService;
+import com.example.projet_restaurant_digitalcity.bl.services.*;
 import com.example.projet_restaurant_digitalcity.dal.repositories.ProductItemRepository;
-import com.example.projet_restaurant_digitalcity.dal.repositories.ProductTemplateRepository;
 import com.example.projet_restaurant_digitalcity.dal.repositories.ProductionItemRepository;
 import com.example.projet_restaurant_digitalcity.dal.repositories.ProductionTemplateRepository;
 import com.example.projet_restaurant_digitalcity.domain.ProductionStatus;
 import com.example.projet_restaurant_digitalcity.domain.entity.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-
+@Service
 public class ProductionServiceImpl implements ProductionService {
 
     private final ProductionTemplateRepository productionTemplateRepository;
@@ -25,16 +23,18 @@ public class ProductionServiceImpl implements ProductionService {
     private final ProductItemRepository productItemRepository;
     private final ProductItemService productItemService;
     private final StorageService storageService;
-    private final ProductTemplateRepository productTemplateRepository;
+    private final ProductTemplateService productTemplateService;
+    private final WorkerService workerService;
 
-    public ProductionServiceImpl(ProductionTemplateRepository productionTemplateRepository, ProductionItemRepository productionItemRepository, ProductItemRepository productItemRepository, ProductItemService productItemService, StorageService storageService, ProductTemplateRepository productTemplateRepository) {
+    public ProductionServiceImpl(ProductionTemplateRepository productionTemplateRepository, ProductionItemRepository productionItemRepository, ProductItemRepository productItemRepository, ProductItemService productItemService, StorageService storageService, ProductTemplateService productTemplateService, WorkerService workerService) {
         this.productionTemplateRepository = productionTemplateRepository;
         this.productionItemRepository = productionItemRepository;
         this.productItemRepository = productItemRepository;
         this.productItemService = productItemService;
 
         this.storageService = storageService;
-        this.productTemplateRepository = productTemplateRepository;
+        this.productTemplateService = productTemplateService;
+        this.workerService = workerService;
     }
 
 
@@ -54,16 +54,7 @@ public class ProductionServiceImpl implements ProductionService {
         if (productionTemplateRepository.existsByName(toCreate.getName())) {
             throw new RuntimeException("this name is already use");
         }
-
-        if (!productTemplateRepository.existsById(toCreate.getProductTemplate().getId())){
-            ProductTemplate newProductTemplate = new ProductTemplate();
-            newProductTemplate.setSupplier(null);
-            newProductTemplate.setName(toCreate.getName());
-            newProductTemplate.setPrice(0);
-            newProductTemplate.setOrigin("Production");
-            newProductTemplate.setId(0);
-            productTemplateRepository.save(newProductTemplate);
-        }
+        toCreate.setProductTemplateResult(productTemplateService.createFromProductionTemplate(toCreate));
         return productionTemplateRepository.save(toCreate);
     }
 
@@ -85,25 +76,24 @@ public class ProductionServiceImpl implements ProductionService {
 
 
     @Override
-    public List<ProductionItem> startProduction(long idProductionTemplate, int nbOfProduction, int ratio) {
+    public ProductionItem startProduction(long idProductionTemplate, int ratio,String nameWorker) {
         if (!productionTemplateRepository.existsById(idProductionTemplate))
             throw new RuntimeException("no production found with this id");
 
-        List<ProductionItem> productionItems = null;
-        for (int i = 0; i < nbOfProduction ; i++) {
-            ProductionItem toCreate = new ProductionItem();
-            toCreate.setId(0);
-            toCreate.setStatus(ProductionStatus.JUST_STARTED);
-            toCreate.setProductionTemplate(productionTemplateRepository.findById(idProductionTemplate)
+
+        ProductionItem toCreate = new ProductionItem();
+        toCreate.setId(0);
+        toCreate.setStatus(ProductionStatus.IN_PROGRESS);
+        toCreate.setProductionTemplate(productionTemplateRepository.findById(idProductionTemplate)
                     .orElseThrow(() -> new RuntimeException("no production found with this id")));
-            toCreate.setRatio(ratio);
+        toCreate.setRatio(ratio);
+        toCreate.setWorker(workerService.findByName(nameWorker));
 
-            productionItems.add(toCreate);
-            productionItemRepository.save(toCreate);
+           productionItemRepository.save(toCreate);
 
-        }
 
-        return productionItems;
+
+        return toCreate;
     }
 
 
@@ -116,42 +106,33 @@ public class ProductionServiceImpl implements ProductionService {
         return productionItem;
     }
 
+    @Override
+    public ProductionItem unPauseProduction(long idProductionItem) {
+        ProductionItem productionItem = productionItemRepository.findById(idProductionItem)
+                .orElseThrow(()-> new RuntimeException("no production found with this id"));
+        productionItem.setStatus(ProductionStatus.IN_PROGRESS);
+        productionItemRepository.save(productionItem);
+        return productionItem;
 
+    }
 
     @Override
-    public void errorDuringProduction(long idProductionItem, ProductTemplate productUsed,double quantity, long idStorage ) {
+    public void errorDuringProduction(long idProductionItem, ProductTemplate productUsed,double quantity, String idStorage) {
         if (!productionItemRepository.existsById(idProductionItem))
             throw new RuntimeException("this production don't exist");
 
-        Storage storage = storageService.getOneById(idStorage);
+        Storage storage = storageService.getOneByName(idStorage);
 
-        double totalToRemove = 0;
-        for (double i = quantity; i > 0; i = i - totalToRemove) {
+        removeProductInStorage(quantity,storage, productUsed);
 
-            Optional<ProductItem> oldestProductItem = storage.getProductItems().stream()
-                    .filter(productItem -> productItem.getProductTemplate().getName().equals(productUsed.getName()))
-                    .min(Comparator.comparing(ProductItem::getExpireDate));
-
-
-            double quantityInStock = oldestProductItem.orElseThrow(() -> new RuntimeException("fatal error")).getQuantity();
-
-            if (quantityInStock < quantity) {
-                quantity -= quantityInStock;
-
-                totalToRemove += quantityInStock;
-                productItemRepository.deleteById(oldestProductItem.orElseThrow().getId());
-            }else {
-                oldestProductItem.orElseThrow().setQuantity(quantityInStock - quantity);
-                totalToRemove += quantity;
-
-                productItemService.update(oldestProductItem.orElseThrow().getId(),oldestProductItem.orElseThrow());
-            }
-        }
         ProductionItem production = productionItemRepository.findById(idProductionItem)
                 .orElseThrow(()-> new RuntimeException("no production found with this id"));
         production.setStatus(ProductionStatus.FAILED);
         productionItemRepository.save(production);
     }
+
+
+
 
     @Override
     public void finishProduction(long idProductionItem, long idStorageToStoreResult, LocalDate expireDateItemResult) {
@@ -198,7 +179,7 @@ public class ProductionServiceImpl implements ProductionService {
 
             ProductItem productItemResult = new ProductItem();
             productItemResult.setId(0);
-            productItemResult.setProductTemplate(productionItem.getProductionTemplate().getProductTemplate());
+            productItemResult.setProductTemplate(productionItem.getProductionTemplate().getProductTemplateResult());
             productItemResult.setStorage(storageService.getOneById(idStorageToStoreResult));
             productItemResult.setExpireDate(expireDateItemResult);
             productItemResult.setQuantity(productionItem.getProductionTemplate().getResultQuantity());
@@ -207,6 +188,33 @@ public class ProductionServiceImpl implements ProductionService {
 
 
 
+        }
+
+    }
+    @Override
+    public void removeProductInStorage(double quantity, Storage storage, ProductTemplate productUsed) {
+
+        double totalToRemove = 0;
+        for (double i = quantity; i > 0; i = i - totalToRemove) {
+
+            Optional<ProductItem> oldestProductItem = storage.getProductItems().stream()
+                    .filter(productItem -> productItem.getProductTemplate().getName().equals(productUsed.getName()))
+                    .min(Comparator.comparing(ProductItem::getExpireDate));
+
+
+            double quantityInProductItem = oldestProductItem.orElseThrow(() -> new RuntimeException("fatal error")).getQuantity();
+
+            if (quantityInProductItem < quantity) {
+                quantity -= quantityInProductItem;
+
+                totalToRemove += quantityInProductItem;
+                productItemRepository.deleteById(oldestProductItem.orElseThrow().getId());
+            }else {
+                oldestProductItem.orElseThrow().setQuantity(quantityInProductItem - quantity);
+                totalToRemove += quantity;
+
+                productItemService.update(oldestProductItem.orElseThrow().getId(),oldestProductItem.orElseThrow());
+            }
         }
     }
 }

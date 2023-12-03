@@ -15,11 +15,11 @@ import org.springframework.stereotype.Service;
 public class SupplierServiceImpl implements SupplierService {
 
     private final SupplierRepository supplierRepository;
-    private final ProductTemplateRepository productTemplateRepository;
 
-    public SupplierServiceImpl(SupplierRepository supplierRepository, ProductTemplateRepository productTemplateRepository) {
+
+    public SupplierServiceImpl(SupplierRepository supplierRepository) {
         this.supplierRepository = supplierRepository;
-        this.productTemplateRepository = productTemplateRepository;
+
     }
 
     @Override

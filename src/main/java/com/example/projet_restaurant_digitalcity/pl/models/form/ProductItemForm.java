@@ -1,6 +1,7 @@
 package com.example.projet_restaurant_digitalcity.pl.models.form;
 
 import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
@@ -15,8 +16,8 @@ public class ProductItemForm {
     private  double quantity;
     @Future
     private LocalDate expireDate;
-    @Positive
-    private long productTemplateId;
+    @NotBlank
+    private String nameProductTemplate;
     @Positive
     private long storageId;
 

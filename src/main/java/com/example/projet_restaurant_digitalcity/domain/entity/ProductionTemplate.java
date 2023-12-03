@@ -32,9 +32,11 @@ public class ProductionTemplate {
     private double resultQuantity;
     @Column(name = "Production_Measuring_Unit",nullable = false)
     private String measuringUnit;
+    @Column(name = "Product_Result_Price")
+    private double priceItemResult;
     @OneToOne
-    @JoinColumn (name = "Product_result",nullable = false)
-    private ProductTemplate productTemplate;
+    @JoinColumn (name = "Product_result",nullable = true)
+    private ProductTemplate productTemplateResult;
     @OneToMany(mappedBy = "idproductionTemplate", cascade = {CascadeType.PERSIST})
     private List<ProductUsage> productUsed ;
 

@@ -1,22 +1,21 @@
 package com.example.projet_restaurant_digitalcity.bl.services.impl;
 import com.example.projet_restaurant_digitalcity.bl.services.ProductItemService;
+import com.example.projet_restaurant_digitalcity.bl.services.StorageService;
 import com.example.projet_restaurant_digitalcity.dal.repositories.ProductItemRepository;
-import com.example.projet_restaurant_digitalcity.dal.repositories.StorageRepository;
 import com.example.projet_restaurant_digitalcity.domain.entity.ProductItem;
-import com.example.projet_restaurant_digitalcity.domain.entity.Storage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProductItemImpl implements ProductItemService {
 
     private final ProductItemRepository productItemRepository;
-    private final StorageRepository storageRepository;
-    public ProductItemImpl(ProductItemRepository productItemRepository, StorageRepository storageRepository) {
+    private final StorageService storageService;
+    public ProductItemImpl(ProductItemRepository productItemRepository, StorageService storageService) {
         this.productItemRepository = productItemRepository;
-        this.storageRepository = storageRepository;
+
+        this.storageService = storageService;
     }
 
     public ProductItem getOneById(long productItemId){
@@ -37,8 +36,7 @@ public class ProductItemImpl implements ProductItemService {
 
     @Override
     public ProductItem addProductInStorage(long storageId, ProductItem productToAdd) {
-        productToAdd.setStorage(storageRepository.findById(storageId)
-                .orElseThrow(() -> new RuntimeException("no storage found with this id")));
+        productToAdd.setStorage(storageService.getOneById(storageId));
         return productItemRepository.save(productToAdd);
 
     }
@@ -54,7 +52,7 @@ public class ProductItemImpl implements ProductItemService {
     @Override
     public ProductItem update(long idProductToUpdate, ProductItem toUpdate) {
         if (!productItemRepository.existsById(idProductToUpdate))
-            throw new RuntimeException("no storage found with this id");
+            throw new RuntimeException("no ProductItem found with this id");
 
         toUpdate.setId(idProductToUpdate);
         return productItemRepository.save(toUpdate);

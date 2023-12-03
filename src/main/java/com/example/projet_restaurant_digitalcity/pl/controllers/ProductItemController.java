@@ -45,9 +45,9 @@ public class ProductItemController {
         return ResponseEntity.ok(productItemInStorageDTOS);
     }
 
-    @PostMapping("/{id:^[0-9]+$}")
-    public ResponseEntity<ProductItemDTO> addProductItemInStorage(@PathVariable("id") long storageId, @RequestBody @Valid ProductItemForm form) {
-        productItemService.addProductInStorage(storageId, productItemMapper.toEntity(form));
+    @PostMapping()
+    public ResponseEntity<ProductItemDTO> addProductItemInStorage( @RequestBody @Valid ProductItemForm form) {
+        productItemService.addProductInStorage(form.getStorageId(), productItemMapper.toEntity(form));
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .build();

@@ -11,7 +11,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = {ProductTemplateService.class, StorageService.class})
 public interface ProductItemMapper {
 
-    @Mapping(target = "productTemplate",source = "productTemplateId")
+    @Mapping(target = "productTemplate",source = "nameProductTemplate")
     @Mapping(target = "storage",source = "storageId")
     ProductItem toEntity(ProductItemForm productItemForm);
 

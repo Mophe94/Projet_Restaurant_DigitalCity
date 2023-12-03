@@ -31,6 +31,7 @@ public class ProductUsage {
 
 
 
+
     @Embeddable
     @Getter @Setter
     @NoArgsConstructor

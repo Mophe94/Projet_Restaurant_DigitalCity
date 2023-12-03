@@ -18,11 +18,11 @@ import java.util.List;
 public class StorageServiceImpl implements StorageService {
 
     public final StorageRepository storageRepository;
-    public final ProductItemRepository productItemRepository;
 
-    public StorageServiceImpl(StorageRepository storageRepository, ProductItemRepository productItemRepository) {
+
+    public StorageServiceImpl(StorageRepository storageRepository) {
         this.storageRepository = storageRepository;
-        this.productItemRepository = productItemRepository;
+
     }
 
 
@@ -36,6 +36,12 @@ public class StorageServiceImpl implements StorageService {
     public Storage getOneById(long storageId) {
         return storageRepository.findById(storageId)
                 .orElseThrow(()->new RuntimeException("no storage with this id"));
+    }
+
+    @Override
+    public Storage getOneByName(String name) {
+        return storageRepository.findByName(name)
+                .orElseThrow();
     }
 
     @Override

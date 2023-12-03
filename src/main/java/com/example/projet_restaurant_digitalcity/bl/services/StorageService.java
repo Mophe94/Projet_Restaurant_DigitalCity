@@ -12,6 +12,8 @@ public interface StorageService {
 
     Storage getOneById(long storageId);
 
+    Storage getOneByName(String name);
+
     Storage create(Storage storageToCreate);
 
     void delete(long idStorageToDelete);

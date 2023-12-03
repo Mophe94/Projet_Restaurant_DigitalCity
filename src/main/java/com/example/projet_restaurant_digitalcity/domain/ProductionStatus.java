@@ -7,7 +7,6 @@ public enum ProductionStatus {
     ALMOST_FINISH,
     FINISH,
     ON_PAUSE,
-
     FAILED
 
 }
