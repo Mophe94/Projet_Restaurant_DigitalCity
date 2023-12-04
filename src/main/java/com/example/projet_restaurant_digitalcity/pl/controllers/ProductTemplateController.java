@@ -63,7 +63,7 @@ public class ProductTemplateController {
     }
 
     @PutMapping("/{id:^[0-9]+$}")
-    public ResponseEntity<?> update(@PathVariable long id,@Valid @RequestBody ProductTemplateForm form){
+    public ResponseEntity<?> update(@PathVariable long id,@Valid @RequestBody  ProductTemplateForm form){
        ProductTemplate update =  productTemplateService.update(id,productTemplateMapper.toEntity(form));
         return ResponseEntity.ok(
                 productTemplateMapper.toDto(update)
@@ -75,6 +75,5 @@ public class ProductTemplateController {
         return ResponseEntity.ok(
                 productTemplateMapper.toDto(productTemplateService.getOneById(idProduct))
         );
-
     }
 }

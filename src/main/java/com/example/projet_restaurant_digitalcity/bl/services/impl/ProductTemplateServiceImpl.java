@@ -2,6 +2,9 @@ package com.example.projet_restaurant_digitalcity.bl.services.impl;
 
 import com.example.projet_restaurant_digitalcity.bl.services.ProductTemplateService;
 import com.example.projet_restaurant_digitalcity.bl.services.SupplierService;
+import com.example.projet_restaurant_digitalcity.bl.services.exception.NameAlreadyUseException;
+import com.example.projet_restaurant_digitalcity.bl.services.exception.NameNotFoudException;
+import com.example.projet_restaurant_digitalcity.bl.services.exception.ResourceNotFoundException;
 import com.example.projet_restaurant_digitalcity.dal.repositories.ProductTemplateRepository;
 import com.example.projet_restaurant_digitalcity.domain.entity.ProductTemplate;
 import com.example.projet_restaurant_digitalcity.domain.entity.ProductionTemplate;
@@ -17,23 +20,21 @@ public class ProductTemplateServiceImpl implements ProductTemplateService {
     private final SupplierService supplierService;
 
 
-
     public ProductTemplateServiceImpl(ProductTemplateRepository productTemplateRepository, SupplierService supplierService) {
         this.productTemplateRepository = productTemplateRepository;
-
         this.supplierService = supplierService;
     }
 
     public ProductTemplate getOneById(long id){
         return productTemplateRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("no item found with this id"));
+                .orElseThrow(() -> new ResourceNotFoundException(ProductTemplate.class,id));
     }
 
     @Override
     public ProductTemplate getOneByName(String name) {
 
         return  productTemplateRepository.findByName(name)
-                .orElseThrow(()-> new RuntimeException("no item found with this name"));
+                .orElseThrow(()-> new NameNotFoudException(ProductTemplate.class,name));
     }
 
     public Page<ProductTemplate> getAll(int page , int countByPage){
@@ -43,14 +44,14 @@ public class ProductTemplateServiceImpl implements ProductTemplateService {
     public ProductTemplate create(ProductTemplate toCreate){
 
         if(productTemplateRepository.existsByName(toCreate.getName()))
-            throw  new RuntimeException("this Name is already use take an oder one");
+            throw  new NameAlreadyUseException(ProductTemplate.class,toCreate.getName());
 
         return productTemplateRepository.save(toCreate);
 
     }
     public  ProductTemplate createFromProductionTemplate(ProductionTemplate toCreate){
         if(productTemplateRepository.existsByName(toCreate.getName()))
-            throw  new RuntimeException("this Name is already use take an oder one");
+            throw new NameAlreadyUseException(ProductTemplate.class,toCreate.getName());
 
         ProductTemplate productTemplateFromProduction = new ProductTemplate();
         productTemplateFromProduction.setPrice(toCreate.getPriceItemResult());
@@ -62,7 +63,7 @@ public class ProductTemplateServiceImpl implements ProductTemplateService {
 
     public ProductTemplate update(long id,ProductTemplate toUpdate){
         if(!productTemplateRepository.existsById(id))
-            throw new RuntimeException("no item found with this id");
+            throw new ResourceNotFoundException(ProductTemplate.class,id);
 
         toUpdate.setId(id);
         return productTemplateRepository.save(toUpdate);
@@ -75,12 +76,11 @@ public class ProductTemplateServiceImpl implements ProductTemplateService {
     public ProductTemplate setSupplierToProduct(long idSupplier, long idProduct) {
 
         ProductTemplate productTemplate = productTemplateRepository.findById(idProduct)
-                .orElseThrow(() -> new RuntimeException("no product found with this id"));
+                .orElseThrow(() -> new ResourceNotFoundException(ProductTemplate.class,idProduct));
 
         Supplier supplier = supplierService.getOneById(idSupplier);
 
         productTemplate.setSupplier(supplier);
-
 
         return productTemplateRepository.save(productTemplate);
     }

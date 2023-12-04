@@ -26,7 +26,7 @@ public class AuthController {
 
     @PostMapping("/login")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginForm form){
+    public ResponseEntity<?> login(@RequestBody @Valid LoginForm form){
         Worker connectedUser = authService.login(form.getUsername(), form.getPassword());
         String token = jwtProvider.generateToken( connectedUser );
         return ResponseEntity.ok(

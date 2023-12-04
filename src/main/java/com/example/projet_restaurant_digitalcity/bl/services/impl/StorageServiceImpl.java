@@ -1,6 +1,9 @@
 package com.example.projet_restaurant_digitalcity.bl.services.impl;
 
 import com.example.projet_restaurant_digitalcity.bl.services.StorageService;
+import com.example.projet_restaurant_digitalcity.bl.services.exception.NameAlreadyUseException;
+import com.example.projet_restaurant_digitalcity.bl.services.exception.NameNotFoudException;
+import com.example.projet_restaurant_digitalcity.bl.services.exception.ResourceNotFoundException;
 import com.example.projet_restaurant_digitalcity.dal.repositories.ProductItemRepository;
 import com.example.projet_restaurant_digitalcity.dal.repositories.StorageRepository;
 import com.example.projet_restaurant_digitalcity.domain.entity.ProductItem;
@@ -25,7 +28,6 @@ public class StorageServiceImpl implements StorageService {
 
     }
 
-
     @Override
     public Page<Storage> getAll(int page, int countByPage) {
 
@@ -35,19 +37,19 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public Storage getOneById(long storageId) {
         return storageRepository.findById(storageId)
-                .orElseThrow(()->new RuntimeException("no storage with this id"));
+                .orElseThrow(()-> new ResourceNotFoundException(Storage.class,storageId));
     }
 
     @Override
     public Storage getOneByName(String name) {
         return storageRepository.findByName(name)
-                .orElseThrow();
+                .orElseThrow(() -> new NameNotFoudException(Storage.class,name));
     }
 
     @Override
     public Storage create(Storage storageToCreate) {
         if (storageRepository.existsByName(storageToCreate.getName()))
-            throw new RuntimeException("this name is already use");
+            throw new NameAlreadyUseException(Storage.class,storageToCreate.getName());
 
         return storageRepository.save(storageToCreate);
     }
@@ -60,7 +62,7 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public Storage update(long idStorageToUpdate, Storage toUpdate) {
         if(!storageRepository.existsById(idStorageToUpdate))
-            throw new RuntimeException("no storage found with this id");
+            throw new ResourceNotFoundException(Storage.class,idStorageToUpdate);
 
         toUpdate.setId(idStorageToUpdate);
         return storageRepository.save(toUpdate);

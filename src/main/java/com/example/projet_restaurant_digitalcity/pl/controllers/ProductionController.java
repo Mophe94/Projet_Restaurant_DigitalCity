@@ -4,18 +4,23 @@ import com.example.projet_restaurant_digitalcity.bl.services.ProductItemService;
 import com.example.projet_restaurant_digitalcity.bl.services.ProductTemplateService;
 import com.example.projet_restaurant_digitalcity.bl.services.ProductionService;
 import com.example.projet_restaurant_digitalcity.bl.services.StorageService;
+import com.example.projet_restaurant_digitalcity.domain.entity.ProductTemplate;
+import com.example.projet_restaurant_digitalcity.domain.entity.ProductUsage;
 import com.example.projet_restaurant_digitalcity.domain.entity.ProductionItem;
+import com.example.projet_restaurant_digitalcity.domain.entity.ProductionTemplate;
 import com.example.projet_restaurant_digitalcity.mapper.ProductItemMapper;
 import com.example.projet_restaurant_digitalcity.mapper.ProductionItemMapper;
 import com.example.projet_restaurant_digitalcity.mapper.ProductionMapper;
 import com.example.projet_restaurant_digitalcity.pl.models.dto.ProductionTemplateDTO;
 import com.example.projet_restaurant_digitalcity.pl.models.form.ProductUseForErrorProductionForm;
 import com.example.projet_restaurant_digitalcity.pl.models.form.ProductionTemplateForm;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -26,19 +31,14 @@ public class ProductionController {
     private final ProductionMapper productionMapper;
     private final ProductionService productionService;
     private final ProductionItemMapper productionItemMapper;
-    private final ProductTemplateService productTemplateService;
-    private final ProductItemService productItemService;
-    private final StorageService storageService;
+
     private final ProductItemMapper productItemMapper;
 
 
-    public ProductionController(ProductionMapper productionMapper, ProductionService productionService, ProductionItemMapper productionItemMapper, ProductTemplateService productTemplateService, ProductItemService productItemService, StorageService storageService, ProductItemMapper productItemMapper) {
+    public ProductionController(ProductionMapper productionMapper, ProductionService productionService, ProductionItemMapper productionItemMapper,StorageService storageService, ProductItemMapper productItemMapper) {
         this.productionMapper = productionMapper;
         this.productionService = productionService;
         this.productionItemMapper = productionItemMapper;
-        this.productTemplateService = productTemplateService;
-        this.productItemService = productItemService;
-        this.storageService = storageService;
         this.productItemMapper = productItemMapper;
     }
 
@@ -58,7 +58,7 @@ public class ProductionController {
     }
 
     @PostMapping()
-    public ResponseEntity<ProductionTemplateDTO> addProductionTemplate(@RequestBody ProductionTemplateForm toCreate) {
+    public ResponseEntity<ProductionTemplateDTO> addProductionTemplate(@RequestBody @Valid ProductionTemplateForm toCreate) {
 
         productionService.create(productionMapper.toEntity(toCreate));
 
@@ -67,6 +67,23 @@ public class ProductionController {
                 .build();
     }
 
+    @PutMapping("/{id:^[0-9]+$}")
+    ResponseEntity<ProductionTemplateDTO> updateProductionTemplate(@PathVariable("id") long idProduction,@RequestBody @Valid ProductionTemplateForm form){
+
+        ProductionTemplate toUpdate = productionService.update(idProduction, productionMapper.toEntity(form));
+        List<ProductUsage> check = toUpdate.getProductUsed();
+        return ResponseEntity.ok(
+                productionMapper.toDto(toUpdate)
+        );
+    }
+
+    @DeleteMapping("/{id:^[0-9]+$}")
+    public ResponseEntity<?> deleteProductionTemplate(@PathVariable("id") long idProductionTemplate){
+        productionService.delete(idProductionTemplate);
+
+        return ResponseEntity.noContent()
+                .build();
+    }
     @PostMapping("/start/{id:^[0-9]+$}")
     public ResponseEntity<?> startProduction(@PathVariable("id") long idProduction, @RequestParam int ratio, @RequestParam String nameWorker) {
 
@@ -92,7 +109,7 @@ public class ProductionController {
     }
 
     @PostMapping("/error/{id:^[0-9]+$}")
-    public ResponseEntity<?> errorProduction(@PathVariable("id") long idProductionItem, @RequestBody List<ProductUseForErrorProductionForm> productUse){
+    public ResponseEntity<?> errorProduction(@PathVariable("id") long idProductionItem, @RequestBody @Valid List<ProductUseForErrorProductionForm> productUse){
             productionService.errorDuringProduction(
                     idProductionItem,
                     productUse.stream().map(productItemMapper::ErrorFormToProductItem).toList()
@@ -101,5 +118,13 @@ public class ProductionController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .build();
+    }
+
+    @PostMapping("/finish/{id:^[0-9]+$}")
+    public ResponseEntity<?> finishProduction(@PathVariable("id") long idProductionItem, @RequestParam long idStorageToStoreResult, LocalDate expireDateItemResult){
+         productionService.finishProduction(idProductionItem,idStorageToStoreResult,expireDateItemResult);
+
+         return ResponseEntity.ok()
+                 .build();
     }
 }

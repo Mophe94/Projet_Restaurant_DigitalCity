@@ -32,7 +32,7 @@ public class ProductItemController {
     }
 
     @GetMapping(path = {"/all"})
-    public ResponseEntity<Page<ProductItemDTO>> getALL(@RequestParam int page, @RequestParam int countByPage){
+    public ResponseEntity<Page<ProductItemDTO>> getALL(@RequestParam int page,@RequestParam int countByPage){
         return ResponseEntity.ok(
                 productItemService.getALL(page,countByPage)
                         .map(productItemMapper::toDto)
@@ -40,7 +40,7 @@ public class ProductItemController {
     }
 
     @GetMapping("/all/{id:^[0-9]+$}")
-    public ResponseEntity<Page<ProductItemDTO>> getProductItemsInStorage(@PathVariable("id") long storageId, @RequestParam int page) {
+    public ResponseEntity<Page<ProductItemDTO>> getProductItemsInStorage(@PathVariable("id") long storageId,@RequestParam int page) {
         Page<ProductItemDTO> productItemInStorageDTOS = productItemService.getProductInStorage(storageId,page,5).map(productItemMapper::toDto);
         return ResponseEntity.ok(productItemInStorageDTOS);
     }

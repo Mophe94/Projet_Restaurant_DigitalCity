@@ -1,6 +1,9 @@
 package com.example.projet_restaurant_digitalcity.bl.services.impl;
 
 import com.example.projet_restaurant_digitalcity.bl.services.SupplierService;
+import com.example.projet_restaurant_digitalcity.bl.services.exception.NameAlreadyUseException;
+import com.example.projet_restaurant_digitalcity.bl.services.exception.NameNotFoudException;
+import com.example.projet_restaurant_digitalcity.bl.services.exception.ResourceNotFoundException;
 import com.example.projet_restaurant_digitalcity.dal.repositories.ProductTemplateRepository;
 import com.example.projet_restaurant_digitalcity.dal.repositories.SupplierRepository;
 import com.example.projet_restaurant_digitalcity.domain.entity.ProductTemplate;
@@ -25,16 +28,15 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public Supplier getOneById(long id) {
         return supplierRepository.findOneById(id)
-                .orElseThrow(() -> new RuntimeException("no supplier with this id"));
+                .orElseThrow(() -> new ResourceNotFoundException(Supplier.class,id));
 
     }
 
     @Override
     public Supplier findOneByName(String name) {
         return supplierRepository.findByName(name)
-                .orElseThrow(() -> new RuntimeException("no supplier found with this name"));
+                .orElseThrow(() -> new NameNotFoudException(Supplier.class,name));
     }
-
 
     @Override
     public Page<Supplier> getAll(int page, int countByPage) {
@@ -44,7 +46,7 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public Supplier create(Supplier toCreate) {
          if (supplierRepository.existsByName(toCreate.getName()))
-             throw new RuntimeException("this name is already use");
+             throw new NameAlreadyUseException(Supplier.class,toCreate.getName());
 
          return supplierRepository.save(toCreate);
     }
@@ -52,7 +54,7 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public Supplier update(Supplier supplierToUpdate, long idSupplierToUpdate) {
         if (!supplierRepository.existsById(idSupplierToUpdate))
-            throw new RuntimeException("no supplier found with this id");
+            throw new ResourceNotFoundException(Supplier.class,idSupplierToUpdate);
 
         supplierToUpdate.setId(idSupplierToUpdate);
         return supplierRepository.save(supplierToUpdate);
@@ -62,9 +64,5 @@ public class SupplierServiceImpl implements SupplierService {
     public void delete(long idSupplierToDelete) {
         supplierRepository.deleteById(idSupplierToDelete);
     }
-
-
-
-
 
 }

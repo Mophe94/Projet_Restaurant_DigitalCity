@@ -13,15 +13,12 @@ import java.util.List;
 @Service
 public class ProductUsageServiceImpl implements ProductUsageService {
 
-
     private final ProductUsageRepository productUsageRepository;
     private final ProductionService productionService;
     private final ProductTemplateService productTemplateService;
 
     public ProductUsageServiceImpl(ProductUsageRepository productUsageRepository, ProductionService productionService, ProductTemplateService productTemplateService) {
         this.productUsageRepository = productUsageRepository;
-
-
         this.productionService = productionService;
         this.productTemplateService = productTemplateService;
     }
@@ -41,8 +38,6 @@ public class ProductUsageServiceImpl implements ProductUsageService {
         ProductUsage toDelete = productUsageRepository.findByIdproductionTemplateAndIdproductTemplate(production,productTemplateService.getOneByName(nameProduct));
         productUsageRepository.delete(toDelete);
     }
-
-
 
 
 }

@@ -21,8 +21,6 @@ public interface ProductTemplateMapper {
 
 
 
-     ProductionTemplate productTemplateToName(String name);
-
 
 }
 

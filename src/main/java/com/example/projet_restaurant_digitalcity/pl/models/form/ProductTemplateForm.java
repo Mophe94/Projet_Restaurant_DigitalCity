@@ -13,6 +13,7 @@ public class ProductTemplateForm {
     @NotBlank
     @Size(min = 0,max = 20)
     private String name;
+    @Positive
     private double price;
     @NotBlank
     private String origin;

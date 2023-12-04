@@ -2,6 +2,7 @@ package com.example.projet_restaurant_digitalcity.mapper;
 
 import com.example.projet_restaurant_digitalcity.bl.services.ProductTemplateService;
 import com.example.projet_restaurant_digitalcity.bl.services.ProductionService;
+import com.example.projet_restaurant_digitalcity.domain.entity.ProductTemplate;
 import com.example.projet_restaurant_digitalcity.domain.entity.ProductionTemplate;
 import com.example.projet_restaurant_digitalcity.pl.models.dto.ProductionTemplateDTO;
 import com.example.projet_restaurant_digitalcity.pl.models.form.ProductionTemplateForm;
@@ -20,6 +21,8 @@ public interface ProductionMapper {
 
 
     ProductionTemplate toEntity (ProductionTemplateForm form);
+
+
 
 
 
