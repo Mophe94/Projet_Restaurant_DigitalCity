@@ -18,11 +18,11 @@ public class WorkerController {
         this.workerService = workerService;
     }
 
-    @GetMapping(path = {"","/all"})
-    public ResponseEntity<Page<Worker>> getAll(@RequestParam int page, int countByPage){
-        Page<WorkerDTO>  workers = workerService.getAll(page, countByPage);
-
-        return
-    }
+//    @GetMapping(path = {"","/all"})
+//    public ResponseEntity<Page<Worker>> getAll(@RequestParam int page, int countByPage){
+//        Page<WorkerDTO>  workers = workerService.getAll(page, countByPage);
+//
+//        return
+//    }
 
 }

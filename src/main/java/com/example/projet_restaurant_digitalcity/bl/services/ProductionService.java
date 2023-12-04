@@ -1,9 +1,6 @@
 package com.example.projet_restaurant_digitalcity.bl.services;
 
-import com.example.projet_restaurant_digitalcity.domain.entity.ProductTemplate;
-import com.example.projet_restaurant_digitalcity.domain.entity.ProductionItem;
-import com.example.projet_restaurant_digitalcity.domain.entity.ProductionTemplate;
-import com.example.projet_restaurant_digitalcity.domain.entity.Storage;
+import com.example.projet_restaurant_digitalcity.domain.entity.*;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
@@ -26,10 +23,10 @@ public interface ProductionService {
 
     ProductionItem unPauseProduction(long idProductionItem);
 
-    void errorDuringProduction(long idProductionItem, ProductTemplate productUsed,double quantity,String nameStorage );
+    void errorDuringProduction(long idProductionItem, List<ProductItem> productUsed);
 
     void finishProduction(long idProductionItem, long idStorageToStoreResult, LocalDate expireDateItemResult);
 
-    void removeProductInStorage(double quantity, Storage storage,ProductTemplate productUsed);
+    void removeProductInStorage(double quantity,ProductTemplate productUsed);
 
 }

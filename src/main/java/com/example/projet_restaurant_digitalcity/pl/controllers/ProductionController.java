@@ -1,9 +1,11 @@
 package com.example.projet_restaurant_digitalcity.pl.controllers;
 
+import com.example.projet_restaurant_digitalcity.bl.services.ProductItemService;
 import com.example.projet_restaurant_digitalcity.bl.services.ProductTemplateService;
 import com.example.projet_restaurant_digitalcity.bl.services.ProductionService;
 import com.example.projet_restaurant_digitalcity.bl.services.StorageService;
 import com.example.projet_restaurant_digitalcity.domain.entity.ProductionItem;
+import com.example.projet_restaurant_digitalcity.mapper.ProductItemMapper;
 import com.example.projet_restaurant_digitalcity.mapper.ProductionItemMapper;
 import com.example.projet_restaurant_digitalcity.mapper.ProductionMapper;
 import com.example.projet_restaurant_digitalcity.pl.models.dto.ProductionTemplateDTO;
@@ -25,33 +27,38 @@ public class ProductionController {
     private final ProductionService productionService;
     private final ProductionItemMapper productionItemMapper;
     private final ProductTemplateService productTemplateService;
+    private final ProductItemService productItemService;
     private final StorageService storageService;
+    private final ProductItemMapper productItemMapper;
 
 
-    public ProductionController(ProductionMapper productionMapper, ProductionService productionService, ProductionItemMapper productionItemMapper, ProductTemplateService productTemplateService, StorageService storageService) {
+    public ProductionController(ProductionMapper productionMapper, ProductionService productionService, ProductionItemMapper productionItemMapper, ProductTemplateService productTemplateService, ProductItemService productItemService, StorageService storageService, ProductItemMapper productItemMapper) {
         this.productionMapper = productionMapper;
         this.productionService = productionService;
         this.productionItemMapper = productionItemMapper;
         this.productTemplateService = productTemplateService;
+        this.productItemService = productItemService;
         this.storageService = storageService;
+        this.productItemMapper = productItemMapper;
     }
 
     @GetMapping("/{id:^[0-9]+$}")
-    public ResponseEntity<ProductionTemplateDTO>getOneById(@PathVariable("id") long idProductionTemplate){
+    public ResponseEntity<ProductionTemplateDTO> getOneById(@PathVariable("id") long idProductionTemplate) {
         return ResponseEntity.ok(
-            productionMapper.toDto(productionService.getOneById(idProductionTemplate))
+                productionMapper.toDto(productionService.getOneById(idProductionTemplate))
         );
     }
 
-    @GetMapping(path = {"","/all"})
-    public ResponseEntity<Page<ProductionTemplateDTO>> getAll(@RequestParam int page, @RequestParam int countByPage){
+    @GetMapping(path = {"", "/all"})
+    public ResponseEntity<Page<ProductionTemplateDTO>> getAll(@RequestParam int page, @RequestParam int countByPage) {
         return ResponseEntity.ok(
                 productionService.getAll(page, countByPage)
                         .map(productionMapper::toDto)
         );
     }
+
     @PostMapping()
-    public ResponseEntity<ProductionTemplateDTO> addProductionTemplate(@RequestBody ProductionTemplateForm toCreate ){
+    public ResponseEntity<ProductionTemplateDTO> addProductionTemplate(@RequestBody ProductionTemplateForm toCreate) {
 
         productionService.create(productionMapper.toEntity(toCreate));
 
@@ -61,15 +68,16 @@ public class ProductionController {
     }
 
     @PostMapping("/start/{id:^[0-9]+$}")
-    public ResponseEntity<?> startProduction(@PathVariable("id") long idProduction,@RequestParam int ratio,@RequestParam String nameWorker){
+    public ResponseEntity<?> startProduction(@PathVariable("id") long idProduction, @RequestParam int ratio, @RequestParam String nameWorker) {
 
         return ResponseEntity.ok(
-                productionItemMapper.toDto(productionService.startProduction(idProduction,ratio,nameWorker))
+                productionItemMapper.toDto(productionService.startProduction(idProduction, ratio, nameWorker))
         );
     }
+
     @PutMapping("/pause/{id:^[0-9]+$}")
-    public ResponseEntity<?> pauseProduction(@PathVariable("id") long idProductionItem){
-              ProductionItem productionItem =  productionService.pauseProduction(idProductionItem);
+    public ResponseEntity<?> pauseProduction(@PathVariable("id") long idProductionItem) {
+        ProductionItem productionItem = productionService.pauseProduction(idProductionItem);
         return ResponseEntity.ok(
                 productionItemMapper.toDto(productionItem)
         );
@@ -82,15 +90,15 @@ public class ProductionController {
                 productionItemMapper.toDto(productionItem)
         );
     }
+
     @PostMapping("/error/{id:^[0-9]+$}")
-    public ResponseEntity<?> errorProduction(@PathVariable("id") long idProductionItem, @RequestBody List<ProductUseForErrorProductionForm>productUse){
-        for (ProductUseForErrorProductionForm product:productUse) {
-        productionService.errorDuringProduction(
-                idProductionItem,
-                productTemplateService.getOneByName(product.getNameProductTemplate()),
-                product.getQuantity(),
-                product.getNameStorage());
-        }
+    public ResponseEntity<?> errorProduction(@PathVariable("id") long idProductionItem, @RequestBody List<ProductUseForErrorProductionForm> productUse){
+            productionService.errorDuringProduction(
+                    idProductionItem,
+                    productUse.stream().map(productItemMapper::ErrorFormToProductItem).toList()
+            );
+
+
         return ResponseEntity.status(HttpStatus.OK)
                 .build();
     }

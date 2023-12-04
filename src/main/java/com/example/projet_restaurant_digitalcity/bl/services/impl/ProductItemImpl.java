@@ -3,6 +3,7 @@ import com.example.projet_restaurant_digitalcity.bl.services.ProductItemService;
 import com.example.projet_restaurant_digitalcity.bl.services.StorageService;
 import com.example.projet_restaurant_digitalcity.dal.repositories.ProductItemRepository;
 import com.example.projet_restaurant_digitalcity.domain.entity.ProductItem;
+import org.hibernate.mapping.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ public class ProductItemImpl implements ProductItemService {
     public Page<ProductItem> getProductInStorage(long storageId, int page, int countByPage) {
         return productItemRepository.findAllByStorage(storageId, PageRequest.of(page,countByPage));
     }
+
 
     @Override
     public ProductItem addProductInStorage(long storageId, ProductItem productToAdd) {
