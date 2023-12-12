@@ -27,5 +27,7 @@ public class AuthServiceImpl implements AuthService {
         return workerRepository.findByUsername(auth.getName())
                 .orElseThrow();
     }
+
+
 }
 

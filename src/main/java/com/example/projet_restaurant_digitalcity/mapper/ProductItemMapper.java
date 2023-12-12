@@ -19,6 +19,7 @@ public interface ProductItemMapper {
 
 
     @Mapping(target = "productTemplateName",source = "productTemplate.name")
+    @Mapping(target = "measuringUnit",source = "productTemplate.measuringUnit")
     ProductItemDTO toDto(ProductItem productItem);
 
     @Mapping(target = "productTemplate",source = "nameProductTemplate")

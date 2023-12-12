@@ -5,6 +5,5 @@ public enum StorageType {
     DRY,
     REFRIGIRATED,
     FROZEN,
-
     OUTDOOR,
 }

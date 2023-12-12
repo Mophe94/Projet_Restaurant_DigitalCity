@@ -53,10 +53,6 @@ public class JWTProvider {
 
         JWTVerifier verifier = JWT.require(Algorithm.HMAC512("#RqzSTh77B29z@vj})Pe6T;Vaoz6jc;~wtG(Bzavk,L#IyokJT"))
                 .acceptExpiresAt(86_400_000)
-//                .withClaim("roles", (claim, decodedJWT) -> {
-//                    List<String> value = claim.asList(String.class);
-//                    return value.isEmpty();
-//                })
                 .build();
 
         try {

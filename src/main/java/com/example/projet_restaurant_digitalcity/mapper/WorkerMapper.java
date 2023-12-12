@@ -2,6 +2,7 @@ package com.example.projet_restaurant_digitalcity.mapper;
 
 import com.example.projet_restaurant_digitalcity.domain.entity.Worker;
 import com.example.projet_restaurant_digitalcity.pl.models.dto.WorkerDTO;
+import com.example.projet_restaurant_digitalcity.pl.models.form.WorkerForm;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -11,4 +12,6 @@ public interface WorkerMapper {
 
     @Mapping(source = "productionItems",target = "productionItemDTOList")
     WorkerDTO toDto(Worker worker);
+
+    Worker toEntity(WorkerForm form);
 }

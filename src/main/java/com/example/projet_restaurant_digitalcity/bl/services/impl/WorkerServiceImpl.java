@@ -4,6 +4,7 @@ import com.example.projet_restaurant_digitalcity.bl.services.WorkerService;
 import com.example.projet_restaurant_digitalcity.bl.services.exception.NameAlreadyUseException;
 import com.example.projet_restaurant_digitalcity.bl.services.exception.ResourceNotFoundException;
 import com.example.projet_restaurant_digitalcity.bl.services.exception.UsernameNotFoundException;
+import com.example.projet_restaurant_digitalcity.dal.repositories.RoleRepository;
 import com.example.projet_restaurant_digitalcity.dal.repositories.WorkerRepository;
 import com.example.projet_restaurant_digitalcity.domain.entity.Worker;
 import org.springframework.data.domain.Page;
@@ -16,9 +17,11 @@ import org.springframework.stereotype.Service;
 public class WorkerServiceImpl implements WorkerService,UserDetailsService {
 
     private final WorkerRepository workerRepository;
+    private final RoleRepository roleRepository;
 
-    public WorkerServiceImpl(WorkerRepository workerRepository) {
+    public WorkerServiceImpl(WorkerRepository workerRepository, RoleRepository roleRepository) {
         this.workerRepository = workerRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -44,9 +47,10 @@ public class WorkerServiceImpl implements WorkerService,UserDetailsService {
     }
 
     @Override
-    public Worker create(Worker tocreate) {
+    public Worker create(Worker tocreate, long idRoles) {
         if (workerRepository.existsByUsername(tocreate.getUsername()))
             throw new NameAlreadyUseException(Worker.class,tocreate.getName());
+        tocreate.setRoles(roleRepository.findById(idRoles).stream().toList());
         return workerRepository.save(tocreate);
     }
 

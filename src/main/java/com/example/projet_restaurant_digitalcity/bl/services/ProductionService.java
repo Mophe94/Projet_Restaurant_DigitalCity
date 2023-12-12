@@ -17,6 +17,10 @@ public interface ProductionService {
 
     void delete(long id);
 
+    Page<ProductionItem> getAllWithStatutInProgress(int page, int countByPage);
+    Page<ProductionItem> getAllWithStatutFinish(int page, int countByPage);
+    Page<ProductionItem> getAllWithStatutFailed(int page, int countByPage);
+
    ProductionItem startProduction(long idProductionTemplate, int quantityToStart,String nameWorker);
 
     ProductionItem pauseProduction(long idProductionItem);

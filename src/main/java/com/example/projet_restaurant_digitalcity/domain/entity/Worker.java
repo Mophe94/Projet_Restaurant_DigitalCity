@@ -18,7 +18,7 @@ import java.util.List;
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Worker implements UserDetails {
+public class Worker implements UserDetails  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

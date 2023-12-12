@@ -14,6 +14,6 @@ public class ProductItemDTO {
     private double quantity;
     private LocalDate expireDate;
     private String productTemplateName;
-
+    private String measuringUnit;
 }
 

@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -74,6 +75,19 @@ public class ProductionServiceImpl implements ProductionService {
     @Override
     public void delete(long id) {
         productionTemplateRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<ProductionItem> getAllWithStatutInProgress(int page, int countByPage) {
+        return productionItemRepository.findAllByStatusContaining(ProductionStatus.IN_PROGRESS,PageRequest.of(page, countByPage));
+    }
+
+    @Override
+    public Page<ProductionItem> getAllWithStatutFinish(int page, int countByPage) {
+        return productionItemRepository.findAllByStatusContaining(ProductionStatus.FINISH,PageRequest.of(page,countByPage));
+    }
+    public Page<ProductionItem> getAllWithStatutFailed(int page, int countByPage) {
+        return productionItemRepository.findAllByStatusContaining(ProductionStatus.FAILED,PageRequest.of(page,countByPage));
     }
 
     @Override
@@ -179,7 +193,7 @@ public class ProductionServiceImpl implements ProductionService {
         while (quantity > 0) {
 
             ProductItem oldestProductItem = productItemRepository.findOldestWithName(productUsed.getName())
-                    .orElseThrow(() -> new NameAlreadyUseException(ProductItem.class,productUsed.getName()));
+                    .orElseThrow(() -> new ResourceNotFoundException(ProductItem.class,productUsed.getName()));
 
             if (oldestProductItem.getQuantity() < quantity) {
                 quantity -= oldestProductItem.getQuantity();
@@ -197,6 +211,6 @@ public class ProductionServiceImpl implements ProductionService {
 
         List<ProductItem> productInStock = productItemRepository.findAllByProductTemplate(productToCheck);
 
-        return (productInStock.stream().mapToDouble(ProductItem::getQuantity).sum() > quantity);
+        return (productInStock.stream().mapToDouble(ProductItem::getQuantity).sum() >= quantity);
     }
 }

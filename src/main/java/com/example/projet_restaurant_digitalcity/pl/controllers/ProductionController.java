@@ -1,16 +1,14 @@
 package com.example.projet_restaurant_digitalcity.pl.controllers;
 
-import com.example.projet_restaurant_digitalcity.bl.services.ProductItemService;
-import com.example.projet_restaurant_digitalcity.bl.services.ProductTemplateService;
 import com.example.projet_restaurant_digitalcity.bl.services.ProductionService;
 import com.example.projet_restaurant_digitalcity.bl.services.StorageService;
-import com.example.projet_restaurant_digitalcity.domain.entity.ProductTemplate;
 import com.example.projet_restaurant_digitalcity.domain.entity.ProductUsage;
 import com.example.projet_restaurant_digitalcity.domain.entity.ProductionItem;
 import com.example.projet_restaurant_digitalcity.domain.entity.ProductionTemplate;
 import com.example.projet_restaurant_digitalcity.mapper.ProductItemMapper;
 import com.example.projet_restaurant_digitalcity.mapper.ProductionItemMapper;
 import com.example.projet_restaurant_digitalcity.mapper.ProductionMapper;
+import com.example.projet_restaurant_digitalcity.pl.models.dto.ProductionItemDTO;
 import com.example.projet_restaurant_digitalcity.pl.models.dto.ProductionTemplateDTO;
 import com.example.projet_restaurant_digitalcity.pl.models.form.ProductUseForErrorProductionForm;
 import com.example.projet_restaurant_digitalcity.pl.models.form.ProductionTemplateForm;
@@ -57,6 +55,7 @@ public class ProductionController {
         );
     }
 
+
     @PostMapping()
     public ResponseEntity<ProductionTemplateDTO> addProductionTemplate(@RequestBody @Valid ProductionTemplateForm toCreate) {
 
@@ -84,6 +83,29 @@ public class ProductionController {
         return ResponseEntity.noContent()
                 .build();
     }
+
+    @GetMapping("/allinprogress")
+    public ResponseEntity<Page<ProductionItemDTO>> getAllProductionInProgress(@RequestParam int page, @RequestParam int countByPage){
+        return ResponseEntity.ok(
+                productionService.getAllWithStatutInProgress(page, countByPage)
+                        .map(productionItemMapper::toDto)
+        );
+    }
+    @GetMapping("/allfinish")
+    public ResponseEntity<Page<ProductionItemDTO>> getAllProductionFinish(@RequestParam int page, @RequestParam int countByPage){
+        return ResponseEntity.ok(
+                productionService.getAllWithStatutFinish(page, countByPage)
+                        .map(productionItemMapper::toDto)
+        );
+    }
+    @GetMapping("/allfailed")
+    public ResponseEntity<Page<ProductionItemDTO>> getAllProductionFailed(@RequestParam int page, @RequestParam int countByPage){
+        return ResponseEntity.ok(
+                productionService.getAllWithStatutFailed(page, countByPage)
+                        .map(productionItemMapper::toDto)
+        );
+    }
+
     @PostMapping("/start/{id:^[0-9]+$}")
     public ResponseEntity<?> startProduction(@PathVariable("id") long idProduction, @RequestParam int ratio, @RequestParam String nameWorker) {
 

@@ -11,7 +11,7 @@ public interface WorkerService {
 
  Worker getOneById(long idWorker);
 
- Worker create(Worker tocreate);
+ Worker create(Worker tocreate, long idRoles);
 
  void delete(long idWorker);
 
